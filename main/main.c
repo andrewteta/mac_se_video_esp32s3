@@ -1,14 +1,17 @@
 #include <stdio.h>
-#include "esp_log.h"
-#include "esp_lcd_types.h"
-#include "esp_lcd_panel_io.h"
-#include "esp_lcd_panel_rgb.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
+#include "esp_timer.h"
+#include "esp_lcd_panel_ops.h"
+#include "esp_lcd_panel_rgb.h"
+#include "driver/gpio.h"
+#include "esp_err.h"
+#include "esp_log.h"
+// #include "lvgl.h"
 
 static const char *TAG = "mac_se_video_3_24_2022_main";
 
-esp_lcd_rgb_panel_frame_trans_done_cb_t frame_done_cb(esp_lcd_panel_handle_t panel, esp_lcd_rgb_panel_event_data_t *edata, void *user_ctx)
+void frame_done_cb(esp_lcd_panel_handle_t panel, esp_lcd_rgb_panel_event_data_t *edata, void *user_ctx)
 {
     return;
 }
@@ -45,13 +48,13 @@ esp_lcd_rgb_panel_config_t panel_cfg =
     .disp_gpio_num = -1,
     // .on_frame_trans_done = frame_done_cb,
     .user_ctx = NULL,
-    {
+    .flags = {
         .relax_on_idle = 0,
-        .fb_in_psram = 0
+        .fb_in_psram = 1
     }
 };
 
-esp_lcd_panel_handle_t panel_handle;
+esp_lcd_panel_handle_t panel_handle = NULL;
 
 void app_main(void)
 {
@@ -67,6 +70,6 @@ void app_main(void)
     while (1)
     {
         ESP_LOGI(TAG, "Spinning...");
-        vTaskDelay(pdMS_TO_TICKS(500));
+        vTaskDelay(pdMS_TO_TICKS(2000));
     }
 }
