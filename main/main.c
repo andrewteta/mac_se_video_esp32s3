@@ -111,9 +111,34 @@ void app_main(void)
     // Initialize LCD panel
     ESP_ERROR_CHECK(esp_lcd_panel_init(panel_handle));
 
+    size_t fb_size = MAC_H_RES * MAC_V_RES * panel_cfg.data_width / 8;
+    uint16_t(*s_lines)[MAC_H_RES] = heap_caps_calloc(1, fb_size, MALLOC_CAP_SPIRAM | MALLOC_CAP_8BIT);
+    if (!s_lines)
+    {
+        ESP_LOGE(TAG, "no mem for framebuffer");
+        while(1)
+            ;
+    }
+
+    for (int row = 0; row < MAC_V_RES; row++)
+    {
+        for (int col = 0; col < MAC_H_RES; col++)
+        {
+            if (col % 2 == 0)
+                s_lines[row][col] = 1;
+            else
+                s_lines[row][col] = 0;
+        }
+    }
+
     // spin forever
     while (1)
     {
+        for (int y = 0; y < MAC_V_RES; y += 1)
+        {
+            esp_lcd_panel_draw_bitmap(panel_handle, 0, y, 0 + MAC_H_RES, y + 1, s_lines[y]);
+        }
+        // esp_lcd_panel_draw_bitmap(panel_handle, 0, 1, 0, 10, 10, {1, 2, 3});
         ESP_LOGI(TAG, "Spinning...");
         vTaskDelay(pdMS_TO_TICKS(2000));
     }
