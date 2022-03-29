@@ -8,13 +8,11 @@
     "idf.openOcdConfigs": [
         "board/esp32s3-builtin.cfg"
     ],
-    "idf.port": "/dev/cu.usbmodem141201",
+    "idf.port": "/dev/cu.usbmodem232101",
     "idf.pythonBinPath": "/Users/andrewteta/.espressif/python_env/idf4.4_py3.9_env/bin/python",
     "idf.toolsPath": "/Users/andrewteta/.espressif",
     "idf.enableCCache": true,
     "idf.cmakeCompilerArgs": [
-        "-j",
-        "N",
         "-G",
         "Ninja",
         "-DPYTHON_DEPS_CHECKED=1",
@@ -23,6 +21,8 @@
     ],
     "idf.flashType": "UART",
     "files.associations": {
-        "esp_lcd_panel_rgb.h": "c"
+        "esp_lcd_panel_rgb.h": "c",
+        "esp_lcd_panel_ops.h": "c",
+        "esp_dsp.h": "c"
     },
 }
